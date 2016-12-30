@@ -1,2 +1,39 @@
-<h3>Home Component</h3>
-<p>Welcome to Angular Seed</p>
+<form #form="ngForm" novalidate style="margin-top: 15px">
+  <div class="form-group">
+    <label for="firstName">First Name</label>
+    <input type="text" class="form-control" name="firstName" id="firstName" value=""
+      [ngModel]="model.firstName" (ngModelChange)="firstLetterToUpperCase($event)">
+  </div>
+  <div class="form-group">
+    <label for="lastName">Last Name</label>
+    <input type="text" class="form-control" name="lastName" id="lastName" value=""
+    [(ngModel)]="model.lastName">
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" name="is-full-time" [(ngModel)]="model.isFullTime">Full Time Employee
+    </label>
+  </div>
+  <label>Payment Tipe</label>
+  <div class="radio">
+    <label>
+      <input type="radio" name="paymentType" value="w2" [(ngModel)]="model.paymentType">W2
+    </label>
+  </div>
+  <div class="radio">
+    <label>
+      <input type="radio" name="paymentType" value="1099" [(ngModel)]="model.paymentType">1099
+    </label>
+  </div>
+  <div class="form-group">
+    <label for="lastName">Primary Language</label>
+    <select class="form-control" name="primaryLanguage"
+      [(ngModel)]="model.primaryLanguage">
+      <option *ngFor="let lang of languages">{{lang}}</option>
+    </select>
+  </div>
+  <button class="btn btn-primary" type="submit">Ok</button>
+  <br />
+  Model binding <pre>{{ model | json }}</pre>
+  Angualar <pre>{{ form.value | json }}</pre>
+</form>
