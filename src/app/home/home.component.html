@@ -1,13 +1,16 @@
-<form #form="ngForm" novalidate style="margin-top: 15px">
-  <div class="form-group">
-    <label for="firstName">First Name</label>
-    <input type="text" class="form-control" name="firstName" id="firstName" value=""
+<h3 *ngIf="languages.length == 0">Loading...</h3>
+<form #form="ngForm" (submit)="submitForm(form)" novalidate style="margin-top: 15px">
+  <div class="form-group" [class.has-error]="firstNameNgModel.invalid && firstNameNgModel.touched">
+    <label class="control-label" for="firstName">First Name</label>
+    <input #firstName #firstNameNgModel="ngModel" required pattern="...+" type="text" class="form-control" name="firstName" id="firstName"
       [ngModel]="model.firstName" (ngModelChange)="firstLetterToUpperCase($event)">
+      <div *ngIf="firstNameNgModel.invalid && firstNameNgModel.touched" class="alert alert-danger">First name required and must be at least 3 characters</div>
   </div>
-  <div class="form-group">
-    <label for="lastName">Last Name</label>
-    <input type="text" class="form-control" name="lastName" id="lastName" value=""
+  <div class="form-group" [class.has-error]="lastNameNgModel.invalid && lastNameNgModel.touched">
+    <label class="control-label" for="lastName">Last Name</label>
+    <input #lastNameNgModel="ngModel" required pattern="...+" type="text" class="form-control" name="lastName" id="lastName"
     [(ngModel)]="model.lastName">
+    <div *ngIf="lastNameNgModel.invalid && lastNameNgModel.touched" class="alert alert-danger">Last name required and must be at least 3 characters</div>
   </div>
   <div class="checkbox">
     <label>
@@ -25,15 +28,31 @@
       <input type="radio" name="paymentType" value="1099" [(ngModel)]="model.paymentType">1099
     </label>
   </div>
-  <div class="form-group">
+  <!--Validation Select-->
+  <div class="form-group" [class.has-error]="hasPrimaryLanguageError">
+    <label class="control-label" for="lastName">Primary Language</label>
+    <select class="form-control" name="primaryLanguage" #primaryLanguage
+      (blur)="validatePrimaryLanguage(primaryLanguage.value)" (change)="validatePrimaryLanguage(primaryLanguage.value)" [(ngModel)]="model.primaryLanguage">
+      <option value="default">Select languages...</option>
+      <option *ngFor="let lang of languages">{{lang}}</option>
+    </select>
+  </div>
+  <!--<div class="form-group">
     <label for="lastName">Primary Language</label>
     <select class="form-control" name="primaryLanguage"
       [(ngModel)]="model.primaryLanguage">
       <option *ngFor="let lang of languages">{{lang}}</option>
     </select>
-  </div>
-  <button class="btn btn-primary" type="submit">Ok</button>
+  </div>-->
+  <button [disabled]="form.invalid" class="btn btn-primary" type="submit">Ok</button>
   <br />
-  Model binding <pre>{{ model | json }}</pre>
-  Angualar <pre>{{ form.value | json }}</pre>
+  Angualar form validation: {{ form.valid }}
+  <br />
+  Angular ngModel propeti invalid: {{ firstNameNgModel.invalid }} <!-- untouched, touched, pristine, dirty, valid, invalid -->
+  <br />
+  Angular css clases: {{ firstName.className }}  <!-- ng-untouched, ng-touched, ng-pristine, ng-dirty, ng-valid, ng-invalid -->
+  <br />
+  Model binding: <pre>{{ model | json }}</pre>
+  Angular form: <pre>{{ form.value | json }}</pre>
 </form>
+
